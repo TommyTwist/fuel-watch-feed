@@ -212,3 +212,7 @@ header.top.flip .pill{margin-left:0; margin-right:10px;}
 #mediaImg{position:absolute; left:0; top:0; right:0; bottom:0; background-repeat:no-repeat; background-position:center center; -webkit-background-size:contain; background-size:contain;}
 #mediaCap{position:absolute; left:96px; bottom:40px; font-size:20px; color:#8c97a6; background:rgba(0,0,0,.45); padding:6px 14px; border-radius:10px;}
 #mediaCap:empty{display:none;}
+
+/* YouTube slides (v2.4.0) */
+#mediaVid{position:absolute; left:0; top:0; width:1920px; height:1080px;}
+#mediaVid iframe{position:absolute; left:0; top:0; width:1920px; height:1080px; border:0; background:#000;}

@@ -11,6 +11,7 @@
   var loading = false;
 
   var CHANGELOG = [
+    { v: "2.4.0", d: "21 Oct 2026", t: "YouTube videos from the screen console play frameless and full screen in the rotation, for a set time or the whole video, with sound on or off." },
     { v: "2.3.0", d: "21 Oct 2026", t: "Image slides: pictures uploaded in the screen console play after each round of pages, for the time set per picture, within optional start and end times." },
     { v: "2.2.0", d: "21 Oct 2026", t: "Screen management: each TV reads its own ID, checks the screen list on GitHub, and follows its settings (pages, rotation, night hours). A switched-off or unregistered screen shows a lock card with its ID." },
     { v: "2.1.2", d: "21 Oct 2026", t: "Checks GitHub for a new version every 5 minutes (set in the manifest) and switches over when the remote has been idle for 5 minutes." },
@@ -379,18 +380,67 @@
     }
     return out;
   }
+  // YouTube: played frameless through player.html on GitHub Pages (proper web origin);
+  // falls back to a direct embed if that page isn't reachable.
+  var PLAYER_URL = CFG.PLAYER_URL || "", playerOk = null;
+  function probePlayer() {
+    if (!PLAYER_URL) { playerOk = false; return; }
+    var x = new XMLHttpRequest();
+    x.open("GET", PLAYER_URL + "?probe=" + new Date().getTime(), true);
+    x.timeout = 8000;
+    x.onreadystatechange = function () { if (x.readyState === 4) playerOk = x.status >= 200 && x.status < 300; };
+    x.ontimeout = function () { playerOk = false; };
+    try { x.send(); } catch (e) { playerOk = false; }
+  }
+  function videoSrc(m) {
+    var loop = m.whole ? "0" : "1", mute = m.muted === false ? "0" : "1";
+    if (playerOk) return PLAYER_URL + "?v=" + encodeURIComponent(m.videoId) + "&mute=" + mute + "&loop=" + loop + (m.start ? "&start=" + m.start : "");
+    return "https://www.youtube.com/embed/" + encodeURIComponent(m.videoId) + "?autoplay=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&mute=" + mute +
+      (m.start ? "&start=" + m.start : "") + (loop === "1" ? "&loop=1&playlist=" + encodeURIComponent(m.videoId) : "");
+  }
+  function clearVideo() {
+    var v = $("mediaVid");
+    if (v) v.innerHTML = "";
+  }
   function showMedia(m) {
     showing = m;
     var box = $("media");
-    $("mediaImg").style.backgroundImage = 'url("' + String(m.src).replace(/"/g, "%22") + '")';
+    clearVideo();
+    if (m.type === "youtube") {
+      $("mediaImg").style.backgroundImage = "none";
+      var f = document.createElement("iframe");
+      f.src = videoSrc(m);
+      f.setAttribute("frameborder", "0");
+      f.setAttribute("allow", "autoplay; encrypted-media");
+      f.setAttribute("scrolling", "no");
+      f.onload = function () {
+        try { f.contentWindow.postMessage(JSON.stringify({ event: "listening", id: 1, channel: "widget" }), "*"); } catch (e) {}
+      };
+      $("mediaVid").appendChild(f);
+    } else {
+      $("mediaImg").style.backgroundImage = 'url("' + String(m.src).replace(/"/g, "%22") + '")';
+    }
     $("mediaCap").textContent = m.name || "";
     box.className = "on";
   }
   function hideMedia() {
     if (!showing) return;
     showing = null; queue = [];
+    clearVideo();
     $("media").className = "";
   }
+  // end / error messages from the player (fw:*) or a direct YouTube embed
+  window.addEventListener("message", function (e) {
+    if (!showing || showing.type !== "youtube") return;
+    var d = e.data, st = null;
+    if (d === "fw:ended" || d === "fw:error") st = 0;
+    else if (typeof d === "string" && d.charAt(0) === "{") {
+      try { d = JSON.parse(d); } catch (x) { return; }
+      if (d.event === "onError") st = 0;
+      else st = d.event === "onStateChange" ? d.info : (d.info && d.info.playerState);
+    }
+    if (st === 0 && (showing.whole || d === "fw:error" || (d && d.event === "onError"))) { lastRotate = 0; autoTick(); }
+  });
   function advance() {
     if (showing) {
       if (queue.length) { showMedia(queue.shift()); return; }
@@ -407,15 +457,20 @@
     var out = [], i, m;
     for (i = 0; i < (list || []).length; i++) {
       m = list[i];
-      if (!m || !m.src) continue;
+      if (!m) continue;
+      var yt = m.type === "youtube";
+      if (yt ? !/^[A-Za-z0-9_-]{11}$/.test(m.videoId || "") : !m.src) continue;
       if (m.screens && m.screens !== "all" && (!m.screens.indexOf || m.screens.indexOf(screenId) < 0)) continue;
-      out.push({ id: m.id, name: m.name || "", src: m.src, seconds: Math.max(5, Math.min(600, Number(m.seconds) || 20)), from: m.from || null, until: m.until || null });
+      out.push({ id: m.id, type: yt ? "youtube" : "image", videoId: m.videoId, whole: !!m.whole, muted: m.muted !== false, start: parseInt(m.start, 10) || 0,
+        name: m.name || "", src: m.src,
+        seconds: yt && m.whole ? 1800 : Math.max(5, Math.min(yt ? 1800 : 600, Number(m.seconds) || (yt ? 60 : 20))), from: m.from || null, until: m.until || null });
+      if (yt) continue;
       if (!preloaded[m.src] && !(m.until && new Date(m.until).getTime() < new Date().getTime())) { preloaded[m.src] = new Image(); preloaded[m.src].src = m.src; }
     }
     mediaList = out;
     if (showing) {
       var still = false;
-      for (i = 0; i < out.length; i++) if (out[i].src === showing.src) still = true;
+      for (i = 0; i < out.length; i++) if (out[i].id === showing.id) still = true;
       if (!still) hideMedia();
     }
   }
@@ -437,7 +492,8 @@
       advance();
       slotMs = showing ? showing.seconds * 1000 : ROTATE_MS;
     }
-    el.textContent = "\u25B6 Auto-cycle \u00B7 " + (showing ? "back to pages" : "next page") + " in " + fmtLeft(slotMs - (now - lastRotate));
+    el.textContent = showing && showing.whole ? "\u25B6 Playing video \u00B7 back to pages when it ends" :
+      "\u25B6 Auto-cycle \u00B7 " + (showing ? "back to pages" : "next page") + " in " + fmtLeft(slotMs - (now - lastRotate));
     el.className = "auto";
   }
 
@@ -601,6 +657,7 @@
       if (screenState === "checking") { screenState = "unknown"; }
     });
   }
+  probePlayer();
   resolveId(checkScreens);
   setInterval(checkScreens, (CFG.UPDATE_CHECK_MINUTES || 5) * 60000);
 

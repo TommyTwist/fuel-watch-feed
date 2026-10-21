@@ -1,5 +1,5 @@
 {
-  "version": "2.3.0",
+  "version": "2.4.0",
   "released": "2026-10-21",
   "files": { "html": "app.html", "css": "app.css", "js": "app.js" },
   "config": {
@@ -12,6 +12,7 @@
     "NIGHT_END": 6,
     "AMBIENT_AFTER_MINUTES": 0,
     "UPDATE_CHECK_MINUTES": 5,
+    "PLAYER_URL": "https://tommytwist.github.io/fuel-watch-feed/player.html",
     "SCREENS_URL": "https://raw.githubusercontent.com/TommyTwist/fuel-watch-feed/main/screens.json"
   }
 }
