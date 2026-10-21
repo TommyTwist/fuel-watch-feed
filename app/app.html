@@ -1,0 +1,123 @@
+<div id="stage">
+    <header class="top">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22h12"/><path d="M4 9h9v13H4z"/><path d="M4 9V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v5"/><path d="M13 7h2l3 3v7a1.5 1.5 0 0 0 3 0v-5.5L18 8"/></svg>
+        </div>
+        <div>
+          <h1>Macclesfield Fuel Watch</h1>
+          <div class="brand-sub">Petrol &amp; diesel prices, market drivers and refuel timing</div>
+        </div>
+      </div>
+      <nav class="tabs" id="tabs">
+        <div class="tab active" data-page="0">Today</div>
+        <div class="tab" data-page="1">Stations</div>
+        <div class="tab" data-page="2">Market</div>
+        <div class="tab" data-page="3">About</div>
+      </nav>
+      <div class="meta">
+        <div class="clock" id="clock">--:--</div>
+        <div class="pill-row">
+          <span class="pill pill-version" id="versionPill">v—</span>
+          <span class="pill pill-refresh" id="refreshPill">Loading…</span>
+        </div>
+      </div>
+    </header>
+
+    <main id="pages">
+      <!-- Page 0: Today -->
+      <section class="page active" id="page0">
+        <div class="hero">
+          <div class="gauge-panel">
+            <svg id="gauge" viewBox="0 0 320 190" class="gauge"></svg>
+            <div class="gauge-verdict" id="verdict">—</div>
+            <div class="gauge-sub" id="verdictSub"></div>
+            <div class="conf">
+              <div class="conf-label"><span>Confidence</span><span id="confPct">—</span></div>
+              <div class="conf-bar"><div class="conf-fill" id="confFill"></div></div>
+            </div>
+          </div>
+          <div class="hero-right">
+            <p class="hero-headline" id="headline"></p>
+            <p class="hero-summary" id="summary"></p>
+            <div class="price-row">
+              <div class="price-tile" id="tilePetrol"></div>
+              <div class="price-tile" id="tileDiesel"></div>
+            </div>
+            <div class="advice" id="advice"></div>
+          </div>
+        </div>
+        <div class="strip" id="strip"></div>
+      </section>
+
+      <!-- Page 1: Stations -->
+      <section class="page" id="page1">
+        <div class="cols">
+          <div class="col-main">
+            <div class="section-label">Macclesfield forecourts, cheapest first</div>
+            <div class="table-card" id="maccTable"></div>
+          </div>
+          <div class="col-side">
+            <div class="section-label">Anglesey · LL65</div>
+            <div class="table-card compact" id="angTable"></div>
+            <div class="section-label spaced">Diesel: Macclesfield vs Anglesey</div>
+            <div class="card regional" id="regional"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Page 2: Market -->
+      <section class="page" id="page2">
+        <div class="cols">
+          <div class="col-main">
+            <div class="section-label">What's moving the price</div>
+            <div class="events" id="events"></div>
+          </div>
+          <div class="col-side">
+            <div class="section-label">Trend · last 3 weeks</div>
+            <div class="card chart-card">
+              <div class="legend" id="legend"></div>
+              <div class="chart-label">Petrol, p/litre</div>
+              <svg id="trendPetrol" viewBox="0 0 640 118" class="chart"></svg>
+              <div class="chart-label">Diesel, p/litre</div>
+              <svg id="trendDiesel" viewBox="0 0 640 118" class="chart"></svg>
+              <div class="chart-label">Brent crude, $/barrel</div>
+              <svg id="trendBrent" viewBox="0 0 640 132" class="chart"></svg>
+            </div>
+            <div class="card stats" id="stats"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Page 3: About -->
+      <section class="page" id="page3">
+        <div class="cols">
+          <div class="col-main">
+            <div class="section-label">Data sources</div>
+            <div class="card list" id="sources"></div>
+          </div>
+          <div class="col-side">
+            <div class="section-label">Versions</div>
+            <div class="card list" id="versions"></div>
+            <div class="section-label spaced">App changelog</div>
+            <div class="card list" id="changelog"></div>
+            <div class="section-label spaced">Remote</div>
+            <div class="card list keys">
+              <div class="row"><span class="key">◀ ▶</span>Switch page</div>
+              <div class="row"><span class="key">OK</span>Refresh now</div>
+              <div class="row"><span class="key">▲ ▼</span>Scroll long lists</div>
+              <div class="row"><span class="key">BACK</span>Exit</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bottom">
+      <span id="status">Starting…</span>
+      <span class="auto" id="autoState"></span>
+      <span class="hint">◀ ▶ pages · OK refresh · BACK exit · Not financial advice</span>
+    </footer>
+  </div>
+<div id="ambient"><div class="amb-card" id="ambCard"></div></div>
+

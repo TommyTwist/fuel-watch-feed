@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "released": "2026-10-21",
+  "files": { "html": "app.html", "css": "app.css", "js": "app.js" },
+  "config": {
+    "FEED_URL": "https://raw.githubusercontent.com/TommyTwist/fuel-watch-feed/main/fuel.json",
+    "REFRESH_MINUTES": 30,
+    "ROTATE_SECONDS": 30,
+    "IDLE_MINUTES": 5,
+    "DRIFT_SECONDS": 60,
+    "NIGHT_START": 23,
+    "NIGHT_END": 6,
+    "AMBIENT_AFTER_MINUTES": 0,
+    "UPDATE_CHECK_MINUTES": 30
+  }
+}
