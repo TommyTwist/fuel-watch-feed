@@ -205,3 +205,10 @@ header.top.flip .pill{margin-left:0; margin-right:10px;}
 .lock-card .id{font-family:"JetBrains Mono",ui-monospace,"Courier New",monospace; font-size:56px; font-weight:700; color:#f0bd52; margin-top:6px; letter-spacing:.04em;}
 .lock-card .f{font-size:21px; margin-top:30px; line-height:1.5;}
 .sid{font-family:"JetBrains Mono",ui-monospace,"Courier New",monospace; color:#c9d1dc;}
+
+/* image slides (v2.3.0) */
+#media{position:absolute; left:0; top:0; width:1920px; height:1080px; background:#000; display:none; z-index:40;}
+#media.on{display:block;}
+#mediaImg{position:absolute; left:0; top:0; right:0; bottom:0; background-repeat:no-repeat; background-position:center center; -webkit-background-size:contain; background-size:contain;}
+#mediaCap{position:absolute; left:96px; bottom:40px; font-size:20px; color:#8c97a6; background:rgba(0,0,0,.45); padding:6px 14px; border-radius:10px;}
+#mediaCap:empty{display:none;}

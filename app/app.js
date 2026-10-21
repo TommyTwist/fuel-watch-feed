@@ -11,6 +11,7 @@
   var loading = false;
 
   var CHANGELOG = [
+    { v: "2.3.0", d: "21 Oct 2026", t: "Image slides: pictures uploaded in the screen console play after each round of pages, for the time set per picture, within optional start and end times." },
     { v: "2.2.0", d: "21 Oct 2026", t: "Screen management: each TV reads its own ID, checks the screen list on GitHub, and follows its settings (pages, rotation, night hours). A switched-off or unregistered screen shows a lock card with its ID." },
     { v: "2.1.2", d: "21 Oct 2026", t: "Checks GitHub for a new version every 5 minutes (set in the manifest) and switches over when the remote has been idle for 5 minutes." },
     { v: "2.1.1", d: "21 Oct 2026", t: "Fix: trend charts and gauge now draw on the 2016 TV browser (SVG built inside a container instead of injected into an empty SVG)." },
@@ -310,7 +311,7 @@
     h += '<div class="row"><div class="t">Feed</div><div class="d">' + esc(CFG.FEED_URL || "Not set — bundled sample") + " · " + esc(d.sourceVersion || "") + "</div></div>";
     $("sources").innerHTML = h;
     h = "";
-    for (i = 0; i < CHANGELOG.length; i++) h += '<div class="row"><span class="ver">v' + CHANGELOG[i].v + '</span><span class="t">' + CHANGELOG[i].d + '</span><div class="d">' + esc(CHANGELOG[i].t) + "</div></div>";
+    for (i = 0; i < Math.min(CHANGELOG.length, 3); i++) h += '<div class="row"><span class="ver">v' + CHANGELOG[i].v + '</span><span class="t">' + CHANGELOG[i].d + '</span><div class="d">' + esc(CHANGELOG[i].t) + "</div></div>";
     $("changelog").innerHTML = h;
     var L = window.FW_LOADER || {};
     var sname = screenEntry && screenEntry.name ? screenEntry.name : "Not named yet";
@@ -366,6 +367,59 @@
     return s >= 60 ? Math.floor(s / 60) + ":" + pad2(s % 60) : s + "s";
   }
 
+  // ---------- image slides (pushed from the screen console) ----------
+  var mediaList = [], queue = [], showing = null, pagesSince = 0, preloaded = {};
+  function activeMedia() {
+    var now = new Date().getTime(), out = [], i, m, f, u;
+    for (i = 0; i < mediaList.length; i++) {
+      m = mediaList[i];
+      f = m.from ? new Date(m.from).getTime() : null;
+      u = m.until ? new Date(m.until).getTime() : null;
+      if ((f === null || isNaN(f) || now >= f) && (u === null || isNaN(u) || now < u)) out.push(m);
+    }
+    return out;
+  }
+  function showMedia(m) {
+    showing = m;
+    var box = $("media");
+    $("mediaImg").style.backgroundImage = 'url("' + String(m.src).replace(/"/g, "%22") + '")';
+    $("mediaCap").textContent = m.name || "";
+    box.className = "on";
+  }
+  function hideMedia() {
+    if (!showing) return;
+    showing = null; queue = [];
+    $("media").className = "";
+  }
+  function advance() {
+    if (showing) {
+      if (queue.length) { showMedia(queue.shift()); return; }
+      hideMedia(); pagesSince = 1; showPage(allowed[0]); return;
+    }
+    pagesSince++;
+    var act = activeMedia();
+    if (pagesSince >= allowed.length && act.length) {
+      queue = act.slice(1); showMedia(act[0]); pagesSince = 0; return;
+    }
+    step(1);
+  }
+  function setMedia(list) {
+    var out = [], i, m;
+    for (i = 0; i < (list || []).length; i++) {
+      m = list[i];
+      if (!m || !m.src) continue;
+      if (m.screens && m.screens !== "all" && (!m.screens.indexOf || m.screens.indexOf(screenId) < 0)) continue;
+      out.push({ id: m.id, name: m.name || "", src: m.src, seconds: Math.max(5, Math.min(600, Number(m.seconds) || 20)), from: m.from || null, until: m.until || null });
+      if (!preloaded[m.src] && !(m.until && new Date(m.until).getTime() < new Date().getTime())) { preloaded[m.src] = new Image(); preloaded[m.src].src = m.src; }
+    }
+    mediaList = out;
+    if (showing) {
+      var still = false;
+      for (i = 0; i < out.length; i++) if (out[i].src === showing.src) still = true;
+      if (!still) hideMedia();
+    }
+  }
+
   function autoTick() {
     var now = new Date().getTime();
     var idleFor = now - lastInteraction;
@@ -376,18 +430,21 @@
       el.className = "auto paused";
       return;
     }
-    if (ambientOn) { lastRotate = now; el.textContent = ""; return; }
-    if (now - lastRotate >= ROTATE_MS) {
+    if (ambientOn) { lastRotate = now; hideMedia(); el.textContent = ""; return; }
+    var slotMs = showing ? showing.seconds * 1000 : ROTATE_MS;
+    if (now - lastRotate >= slotMs) {
       lastRotate = now;
-      step(1);
+      advance();
+      slotMs = showing ? showing.seconds * 1000 : ROTATE_MS;
     }
-    el.textContent = "\u25B6 Auto-cycle \u00B7 next page in " + fmtLeft(ROTATE_MS - (now - lastRotate));
+    el.textContent = "\u25B6 Auto-cycle \u00B7 " + (showing ? "back to pages" : "next page") + " in " + fmtLeft(slotMs - (now - lastRotate));
     el.className = "auto";
   }
 
   document.addEventListener("keydown", function (e) {
     lastInteraction = new Date().getTime();
     if (ambientOn) { setAmbient(false); autoTick(); e.preventDefault(); return; }
+    if (showing) { hideMedia(); if (e.keyCode === 13 || e.keyCode === 37 || e.keyCode === 39) { autoTick(); e.preventDefault(); return; } }
     autoTick();
     switch (e.keyCode) {
       case 37: step(-1); break;                  // left
@@ -515,6 +572,7 @@
       '<div class="f">Add or enable this ID in the Fuel Watch screen console. It checks again every few minutes.</div></div>';
   }
   function applyScreens(sj) {
+    setMedia(sj && sj.media);
     var policy = (sj && sj.policy) || "open";
     var list = (sj && sj.screens) || {};
     screenEntry = list[screenId] || null;
