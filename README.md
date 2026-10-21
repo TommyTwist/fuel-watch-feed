@@ -20,3 +20,10 @@ reloads into a new version once the remote has been idle for 5 minutes.
   rotation, idle pause, burn-in drift, overnight ambient hours, update-check interval)
 
 Anything pushed to `main` under `app/` runs on the TV, so keep pushes to this repo trusted.
+
+## Screens
+
+`screens.json` lists the TVs: `policy` (`open` = any TV runs; `allowlist` = only listed, enabled screens),
+`defaults` (settings for every screen) and `screens` keyed by each TV's ID (shown on its About page and on
+the lock card), each with `name`, `enabled`, `pages` and `config` overrides. Manage it from the
+Fuel Watch Screens console; an hourly sync writes the console's changes here.

@@ -11,6 +11,7 @@
   var loading = false;
 
   var CHANGELOG = [
+    { v: "2.2.0", d: "21 Oct 2026", t: "Screen management: each TV reads its own ID, checks the screen list on GitHub, and follows its settings (pages, rotation, night hours). A switched-off or unregistered screen shows a lock card with its ID." },
     { v: "2.1.2", d: "21 Oct 2026", t: "Checks GitHub for a new version every 5 minutes (set in the manifest) and switches over when the remote has been idle for 5 minutes." },
     { v: "2.1.1", d: "21 Oct 2026", t: "Fix: trend charts and gauge now draw on the 2016 TV browser (SVG built inside a container instead of injected into an empty SVG)." },
     { v: "2.1.0", d: "21 Oct 2026", t: "Burn-in: the header mirrors on every other page, swapping the title and the clock/pills from side to side." },
@@ -312,12 +313,21 @@
     for (i = 0; i < CHANGELOG.length; i++) h += '<div class="row"><span class="ver">v' + CHANGELOG[i].v + '</span><span class="t">' + CHANGELOG[i].d + '</span><div class="d">' + esc(CHANGELOG[i].t) + "</div></div>";
     $("changelog").innerHTML = h;
     var L = window.FW_LOADER || {};
+    var sname = screenEntry && screenEntry.name ? screenEntry.name : "Not named yet";
+    var stLabel = { enabled: "Registered and enabled", open: "Not registered (open access)", unregistered: "Not registered", blocked: "Switched off", checking: "Checking access…", unknown: "Access list unreachable" }[screenState] || screenState;
     $("versions").innerHTML =
+      '<div class="row"><div class="t">' + esc(sname) + '</div><div class="d">Screen ID <b class="sid">' + esc(screenId || "…") + '</b>' + (screenModel ? " · " + esc(screenModel) : "") + " · " + esc(stLabel) + '</div></div>' +
       '<div class="row"><div class="t">App v' + esc(CFG.APP_VERSION || CHANGELOG[0].v) + '</div><div class="d">Loaded from ' + esc(L.source || "package") + (L.loadedAt ? " · " + esc(L.loadedAt) : "") + '</div></div>' +
       '<div class="row"><div class="t">Loader v' + esc(L.version || "—") + '</div><div class="d">Installed on the TV; checks GitHub for app updates every ' + (CFG.UPDATE_CHECK_MINUTES || 30) + ' minutes</div></div>';
   }
 
   // ---------- navigation ----------
+  var allowed = [0, 1, 2, 3];
+  function step(dir) {
+    var i = allowed.indexOf(page);
+    if (i < 0) i = 0;
+    showPage(allowed[(i + dir + allowed.length) % allowed.length]);
+  }
   function showPage(n) {
     page = (n + PAGE_COUNT) % PAGE_COUNT;
     var tabs = document.querySelectorAll(".tab"), pages = document.querySelectorAll(".page"), i;
@@ -369,7 +379,7 @@
     if (ambientOn) { lastRotate = now; el.textContent = ""; return; }
     if (now - lastRotate >= ROTATE_MS) {
       lastRotate = now;
-      showPage(page + 1);
+      step(1);
     }
     el.textContent = "\u25B6 Auto-cycle \u00B7 next page in " + fmtLeft(ROTATE_MS - (now - lastRotate));
     el.className = "auto";
@@ -380,15 +390,15 @@
     if (ambientOn) { setAmbient(false); autoTick(); e.preventDefault(); return; }
     autoTick();
     switch (e.keyCode) {
-      case 37: showPage(page - 1); break;        // left
-      case 39: showPage(page + 1); break;        // right
+      case 37: step(-1); break;                  // left
+      case 39: step(1); break;                   // right
       case 38: scrollActive(-1); break;          // up
       case 40: scrollActive(1); break;           // down
       case 13: refresh(); break;                 // OK / Enter
-      case 403: showPage(0); break;              // red
-      case 404: showPage(1); break;              // green
-      case 405: showPage(2); break;              // yellow
-      case 406: showPage(3); break;              // blue
+      case 403: if (allowed.indexOf(0) >= 0) showPage(0); break;              // red
+      case 404: if (allowed.indexOf(1) >= 0) showPage(1); break;              // green
+      case 405: if (allowed.indexOf(2) >= 0) showPage(2); break;              // yellow
+      case 406: if (allowed.indexOf(3) >= 0) showPage(3); break;              // blue
       case 10009: exitApp(); break;              // BACK
       default: return;
     }
@@ -471,6 +481,70 @@
   autoTick();
   setInterval(autoTick, 1000);
   setInterval(drift, (CFG.DRIFT_SECONDS || 60) * 1000);
+
+  // ---------- screen identity + remote access control ----------
+  var SCREENS_URL = CFG.SCREENS_URL || "https://raw.githubusercontent.com/TommyTwist/fuel-watch-feed/main/screens.json";
+  var screenId = null, screenModel = "", screenEntry = null, screenState = "checking";
+  function loadScript(src, cb) {
+    var sc = document.createElement("script"), done = false;
+    sc.src = src;
+    sc.onload = sc.onerror = function () { if (!done) { done = true; cb(); } };
+    document.getElementsByTagName("head")[0].appendChild(sc);
+    setTimeout(function () { if (!done) { done = true; cb(); } }, 4000);
+  }
+  function resolveId(cb) {
+    loadScript("$WEBAPIS/webapis/webapis.js", function () {
+      try { screenId = String(window.webapis.productinfo.getDuid() || "").split(/\s+/)[0] || null; } catch (e) {}
+      try { screenModel = window.webapis.productinfo.getRealModel() || window.webapis.productinfo.getModel(); } catch (e) {}
+      if (!screenId) {
+        try { screenId = window.localStorage.getItem("fuelwatch.screenId"); } catch (e) {}
+        if (!screenId) {
+          screenId = "WEB-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+          try { window.localStorage.setItem("fuelwatch.screenId", screenId); } catch (e) {}
+        }
+      }
+      cb();
+    });
+  }
+  function lockScreen(on, msg) {
+    var el = $("lock");
+    if (!el) return;
+    el.className = on ? "on" : "";
+    if (on) el.innerHTML = '<div class="lock-card"><div class="t">Fuel Watch</div><div class="h">' + esc(msg) + '</div>' +
+      '<div class="d">Screen ID</div><div class="id">' + esc(screenId || "unknown") + '</div>' +
+      '<div class="f">Add or enable this ID in the Fuel Watch screen console. It checks again every few minutes.</div></div>';
+  }
+  function applyScreens(sj) {
+    var policy = (sj && sj.policy) || "open";
+    var list = (sj && sj.screens) || {};
+    screenEntry = list[screenId] || null;
+    if (screenEntry && screenEntry.enabled === false) { screenState = "blocked"; lockScreen(true, "This screen has been switched off."); return; }
+    if (!screenEntry && policy === "allowlist") { screenState = "unregistered"; lockScreen(true, "This screen isn't registered yet."); return; }
+    screenState = screenEntry ? "enabled" : "open";
+    lockScreen(false);
+    var c = (sj && sj.defaults) || {}, o = (screenEntry && screenEntry.config) || {}, k;
+    for (k in c) if (c.hasOwnProperty(k)) CFG[k] = c[k];
+    for (k in o) if (o.hasOwnProperty(k)) CFG[k] = o[k];
+    ROTATE_MS = (CFG.ROTATE_SECONDS || 30) * 1000;
+    var pg = (screenEntry && screenEntry.pages) || (c.pages) || null;
+    var names = { today: 0, stations: 1, market: 2, about: 3 }, next = [], i;
+    if (pg && pg.length) { for (i = 0; i < pg.length; i++) if (names.hasOwnProperty(pg[i])) next.push(names[pg[i]]); }
+    if (!next.length) next = [0, 1, 2, 3];
+    next.sort();
+    allowed = next;
+    var tabs = document.querySelectorAll(".tab");
+    for (i = 0; i < tabs.length; i++) tabs[i].style.display = allowed.indexOf(i) >= 0 ? "" : "none";
+    if (allowed.indexOf(page) < 0) showPage(allowed[0]);
+    if (data) renderAbout(data);
+  }
+  function checkScreens() {
+    xhrJSON(SCREENS_URL + "?t=" + new Date().getTime(), 10000, applyScreens, function () {
+      // GitHub unreachable: keep the last decision; first run with nothing known stays open
+      if (screenState === "checking") { screenState = "unknown"; }
+    });
+  }
+  resolveId(checkScreens);
+  setInterval(checkScreens, (CFG.UPDATE_CHECK_MINUTES || 5) * 60000);
 
   // ---------- remote updates (faster than the loader's fixed 30-minute check) ----------
   var MANIFEST_URL = CFG.MANIFEST_URL || "https://raw.githubusercontent.com/TommyTwist/fuel-watch-feed/main/app/manifest.json";

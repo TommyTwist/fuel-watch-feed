@@ -1,0 +1,20 @@
+{
+  "_about": "Fuel Watch screen list. Written by the hourly console sync; edit in the Fuel Watch Screens console rather than by hand.",
+  "updatedAt": "2026-10-21T19:55:00+01:00",
+  "policy": "open",
+  "defaults": {},
+  "screens": {
+    "MTCISIBYIIMXE": {
+      "name": "Office TV",
+      "enabled": true,
+      "pages": [
+        "today",
+        "stations",
+        "market",
+        "about"
+      ],
+      "config": {},
+      "note": "UE43KU6670, 2016, Tizen 2.4"
+    }
+  }
+}

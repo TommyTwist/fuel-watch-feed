@@ -194,3 +194,14 @@ header.top.flip .brand-mark{margin-right:0; margin-left:20px;}
 header.top.flip .meta{text-align:left;}
 header.top.flip .pill-row{-webkit-box-pack:start; -webkit-justify-content:flex-start; justify-content:flex-start;}
 header.top.flip .pill{margin-left:0; margin-right:10px;}
+
+/* screen lock (v2.2.0) */
+#lock{position:absolute; left:0; top:0; width:1920px; height:1080px; background:#06090e; display:none; z-index:60;}
+#lock.on{display:-webkit-box; display:-webkit-flex; display:flex; -webkit-box-align:center; -webkit-align-items:center; align-items:center; -webkit-box-pack:center; -webkit-justify-content:center; justify-content:center;}
+.lock-card{width:820px; padding:48px 56px; border-radius:24px; background:#0f151e; border:2px solid #1d2532; color:#95a1b0;}
+.lock-card .t{font-size:20px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:#6b7686;}
+.lock-card .h{font-size:40px; font-weight:800; color:#c9d1dc; margin-top:8px;}
+.lock-card .d{font-size:18px; text-transform:uppercase; letter-spacing:.06em; margin-top:34px; color:#6b7686; font-weight:700;}
+.lock-card .id{font-family:"JetBrains Mono",ui-monospace,"Courier New",monospace; font-size:56px; font-weight:700; color:#f0bd52; margin-top:6px; letter-spacing:.04em;}
+.lock-card .f{font-size:21px; margin-top:30px; line-height:1.5;}
+.sid{font-family:"JetBrains Mono",ui-monospace,"Courier New",monospace; color:#c9d1dc;}
