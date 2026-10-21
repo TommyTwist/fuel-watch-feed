@@ -11,6 +11,7 @@
   var loading = false;
 
   var CHANGELOG = [
+    { v: "2.1.0", d: "21 Oct 2026", t: "Burn-in: the header mirrors on every other page, swapping the title and the clock/pills from side to side." },
     { v: "2.0.0", d: "21 Oct 2026", t: "Remote-managed: the app now loads from GitHub, so updates need no reinstall. Burn-in protection: dimmer static header and footer, pixel drift every minute, near-black ambient view overnight." },
     { v: "1.2.0", d: "21 Oct 2026", t: "Pages auto-cycle every 30 seconds; any remote press pauses cycling until 5 minutes without input." },
     { v: "1.1.0", d: "21 Oct 2026", t: "Reads the daily feed from GitHub; app name fixed for the TV's app list; leaner package." },
@@ -316,6 +317,9 @@
     var tabs = document.querySelectorAll(".tab"), pages = document.querySelectorAll(".page"), i;
     for (i = 0; i < tabs.length; i++) tabs[i].className = "tab" + (i === page ? " active" : "");
     for (i = 0; i < pages.length; i++) pages[i].className = "page" + (i === page ? " active" : "");
+    // burn-in: mirror the header on every other page so its items swap sides
+    var hd = document.querySelector("header.top");
+    if (hd) hd.className = "top" + (page % 2 === 1 ? " flip" : "");
   }
 
   function scrollActive(dir) {

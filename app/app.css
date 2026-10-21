@@ -185,3 +185,11 @@ footer.bottom .auto{color:#6b7686;}
 .amb-card .row{display:-webkit-box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-between; justify-content:space-between; margin-top:14px; font-family:"JetBrains Mono",ui-monospace,"Courier New",monospace; font-size:30px;}
 .amb-card .row span:first-child{font-family:"Plus Jakarta Sans",sans-serif; font-size:20px; color:#5f6a78; -webkit-align-self:center; align-self:center;}
 .amb-card .foot{margin-top:14px; font-size:16px; color:#4b5563;}
+
+/* header mirrored on odd pages (v2.1.0) */
+header.top.flip{-webkit-box-direction:reverse; -webkit-flex-direction:row-reverse; flex-direction:row-reverse;}
+header.top.flip .brand{-webkit-box-direction:reverse; -webkit-flex-direction:row-reverse; flex-direction:row-reverse; text-align:right;}
+header.top.flip .brand-mark{margin-right:0; margin-left:20px;}
+header.top.flip .meta{text-align:left;}
+header.top.flip .pill-row{-webkit-box-pack:start; -webkit-justify-content:flex-start; justify-content:flex-start;}
+header.top.flip .pill{margin-left:0; margin-right:10px;}
