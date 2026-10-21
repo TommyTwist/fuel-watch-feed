@@ -1,5 +1,5 @@
 {
-  "version": "2.1.1",
+  "version": "2.1.2",
   "released": "2026-10-21",
   "files": { "html": "app.html", "css": "app.css", "js": "app.js" },
   "config": {
@@ -11,6 +11,6 @@
     "NIGHT_START": 23,
     "NIGHT_END": 6,
     "AMBIENT_AFTER_MINUTES": 0,
-    "UPDATE_CHECK_MINUTES": 30
+    "UPDATE_CHECK_MINUTES": 5
   }
 }

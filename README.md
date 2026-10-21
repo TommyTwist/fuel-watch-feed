@@ -10,7 +10,7 @@ Personal instrument panel, not financial advice.
 
 The TV has a small loader installed once (`Fuel Watch` v2 package). On every start it fetches the app from
 [`app/`](app/) on the `main` branch, keeps the last good copy on the TV, and falls back to the copy built into
-the package if GitHub can't be reached. While running it re-checks `app/manifest.json` every 30 minutes and
+the package if GitHub can't be reached. While running it re-checks `app/manifest.json` every few minutes (`UPDATE_CHECK_MINUTES`, default 5; the loader itself also checks every 30) and
 reloads into a new version once the remote has been idle for 5 minutes.
 
 - `app/app.html` – page markup

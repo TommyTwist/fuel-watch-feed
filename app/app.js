@@ -11,6 +11,7 @@
   var loading = false;
 
   var CHANGELOG = [
+    { v: "2.1.2", d: "21 Oct 2026", t: "Checks GitHub for a new version every 5 minutes (set in the manifest) and switches over when the remote has been idle for 5 minutes." },
     { v: "2.1.1", d: "21 Oct 2026", t: "Fix: trend charts and gauge now draw on the 2016 TV browser (SVG built inside a container instead of injected into an empty SVG)." },
     { v: "2.1.0", d: "21 Oct 2026", t: "Burn-in: the header mirrors on every other page, swapping the title and the clock/pills from side to side." },
     { v: "2.0.0", d: "21 Oct 2026", t: "Remote-managed: the app now loads from GitHub, so updates need no reinstall. Burn-in protection: dimmer static header and footer, pixel drift every minute, near-black ambient view overnight." },
@@ -470,6 +471,19 @@
   autoTick();
   setInterval(autoTick, 1000);
   setInterval(drift, (CFG.DRIFT_SECONDS || 60) * 1000);
+
+  // ---------- remote updates (faster than the loader's fixed 30-minute check) ----------
+  var MANIFEST_URL = CFG.MANIFEST_URL || "https://raw.githubusercontent.com/TommyTwist/fuel-watch-feed/main/app/manifest.json";
+  var updateTo = null;
+  function checkUpdate() {
+    xhrJSON(MANIFEST_URL + "?t=" + new Date().getTime(), 10000, function (m) {
+      if (m && m.version && m.version !== CFG.APP_VERSION) updateTo = m.version;
+    }, function () {});
+  }
+  setInterval(function () {
+    if (updateTo && new Date().getTime() - lastInteraction >= IDLE_MS) window.location.reload();
+  }, 15000);
+  setInterval(checkUpdate, (CFG.UPDATE_CHECK_MINUTES || 5) * 60000);
   ambientTick();
   setInterval(ambientTick, 20000);
 })();
