@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "updatedAt": "2026-10-21T07:10:00+01:00",
+  "updatedLabel": "21 Oct, 07:10 BST",
+  "sourceVersion": "Fuel Watch Shared v1.1.27",
+  "verdict": {
+    "label": "Fill Soon",
+    "confidence": 55,
+    "previous": "Fill Now",
+    "headline": "Brent pauses near $110 after Monday's five-month peak; the Hormuz picture stays two-sided.",
+    "summary": "Gulf exports topped prewar levels last week and Qatar and Pakistan floated a possible breakthrough, but the FT says renewed US-Israeli strikes remain a real risk."
+  },
+  "cheapest": {
+    "petrol": { "price": 174.9, "delta": 0, "stations": ["Sainsbury's, Cheadle"], "vsNational": 1.3, "note": "Sole cheapest, 12th straight day" },
+    "diesel": { "price": 199.9, "delta": 0, "stations": ["Sainsbury's, Cheadle", "Tesco, Hibel Road"], "vsNational": 1.1, "note": "Joint cheapest, 2nd day" }
+  },
+  "national": { "petrol": 173.6, "petrolDelta": -0.2, "diesel": 198.8, "dieselDelta": 0, "asOf": "20 Oct, 11:24" },
+  "brent": { "price": 110.22, "day": -0.2, "week": 3.8, "month": 11.1, "year": 76.1 },
+  "gbpusd": 1.3366,
+  "forecast": { "dieselRange": "197–208p", "horizon": "2 weeks" },
+  "stations": {
+    "macclesfield": [
+      { "rank": 1, "name": "Sainsbury's", "area": "Wilmslow Road, Cheadle", "petrol": 174.9, "petrolDelta": 0, "diesel": 199.9, "dieselDelta": 0, "tags": ["Cheapest unleaded", "Joint cheapest diesel", "Regular route"], "stale": null },
+      { "rank": 2, "name": "Tesco", "area": "Hibel Road", "petrol": 177.9, "petrolDelta": 0, "diesel": 199.9, "dieselDelta": 0, "tags": ["Joint cheapest diesel"], "stale": null },
+      { "rank": 2, "name": "Esso", "area": "Chelford Road", "petrol": 177.9, "petrolDelta": 0, "diesel": 201.9, "dieselDelta": 0, "tags": [], "stale": "9 days old" },
+      { "rank": 4, "name": "Shell", "area": "London Road", "petrol": 178.9, "petrolDelta": 0, "diesel": 201.9, "dieselDelta": 0, "tags": [], "stale": "8 days old" },
+      { "rank": 5, "name": "Shell", "area": "Alderley Road", "petrol": 179.9, "petrolDelta": 0, "diesel": 204.9, "dieselDelta": 0, "tags": ["Priciest diesel"], "stale": null },
+      { "rank": 6, "name": "Shell", "area": "Manchester Road", "petrol": 181.9, "petrolDelta": 0, "diesel": 202.9, "dieselDelta": 0, "tags": [], "stale": null },
+      { "rank": 6, "name": "Asda Express", "area": "Churchill Way (was Esso)", "petrol": 181.9, "petrolDelta": 0, "diesel": 201.9, "dieselDelta": 0, "tags": [], "stale": "31 days old" },
+      { "rank": 8, "name": "Gulf", "area": "Chelford Road, Henbury", "petrol": 183.9, "petrolDelta": 0, "diesel": 203.9, "dieselDelta": 0, "tags": [], "stale": null },
+      { "rank": 8, "name": "Shell", "area": "Broken Cross, Chester Road", "petrol": 183.9, "petrolDelta": 0, "diesel": 203.9, "dieselDelta": 0, "tags": [], "stale": null }
+    ],
+    "anglesey": [
+      { "rank": 1, "name": "Essar", "area": "London Road, Valley", "petrol": 169.9, "petrolDelta": 0, "diesel": 194.9, "dieselDelta": 0, "tags": ["Joint cheapest both"], "stale": "9 days old" },
+      { "rank": 1, "name": "Jet", "area": "Dyffryn Service Station", "petrol": 169.9, "petrolDelta": 0, "diesel": 194.9, "dieselDelta": 0, "tags": ["Joint cheapest both"], "stale": "9 days old" },
+      { "rank": 3, "name": "Morrisons", "area": "Penrhos, Holyhead", "petrol": 173.9, "petrolDelta": 0, "diesel": 198.9, "dieselDelta": 0, "tags": [], "stale": null },
+      { "rank": 4, "name": "Tesco", "area": "Penrhos, Holyhead", "petrol": 174.9, "petrolDelta": 0, "diesel": 199.9, "dieselDelta": 0, "tags": [], "stale": "17 days old" }
+    ]
+  },
+  "regionalDiesel": { "macclesfield": 199.9, "anglesey": 194.9, "gap": 5.0, "saving50L": 2.50, "cheaperArea": "Anglesey" },
+  "events": [
+    { "title": "Brent eases off its five-month peak", "tag": "Two-sided", "tone": "warn", "text": "Touched $111.99 on Monday, dipped Tuesday, and is holding near $110 today." },
+    { "title": "Gulf exports back above prewar", "tag": "Relief", "tone": "good", "text": "Hormuz flows near 82% of prewar even in the worst month for attacks since March." },
+    { "title": "Qatar–Pakistan compromise", "tag": "Relief", "tone": "good", "text": "A dated diplomatic offer that could land this week: frozen-funds interest for an IAEA visit." },
+    { "title": "Renewed strikes still possible", "tag": "Escalating", "tone": "bad", "text": "FT reports a new US-Israeli offensive was only held back ahead of the US midterms." },
+    { "title": "Lavrov visits Tehran", "tag": "Two-sided", "tone": "warn", "text": "First visit of the war; Iran calls cooperation closer than ever, Trump plays it down." },
+    { "title": "UK Budget in 7 days", "tag": "Pending", "tone": "warn", "text": "28 Oct decides whether the 5p duty cut survives past 31 Dec. OPEC+ meets 1 Nov." }
+  ],
+  "advice": {
+    "text": "Fill soon at Sainsbury's, Wilmslow Road, Cheadle: cheapest unleaded at 174.9p and joint-cheapest diesel at 199.9p.",
+    "caveat": "Oil headlines can reverse fast either way. Pump prices can differ from any feed, so check before a detour."
+  },
+  "trend": [
+    {"date": "2026-10-01", "petrol": 174.7, "diesel": 200.1, "brent": 97.3, "localPetrol": 175.9, "localDiesel": 199.9},
+    {"date": "2026-10-02", "petrol": 174.8, "diesel": 200.1, "brent": 102.05, "localPetrol": 176.9, "localDiesel": 199.9},
+    {"date": "2026-10-03", "petrol": 174.7, "diesel": 200.0, "brent": 102.5, "localPetrol": 176.9, "localDiesel": 199.9},
+    {"date": "2026-10-04", "petrol": 175.0, "diesel": 200.3, "brent": 102.3, "localPetrol": 176.9, "localDiesel": 199.9},
+    {"date": "2026-10-05", "petrol": 175.0, "diesel": 200.3, "brent": 101.5, "localPetrol": 176.9, "localDiesel": 199.9},
+    {"date": "2026-10-06", "petrol": 175.0, "diesel": 200.3, "brent": 100.8, "localPetrol": 176.9, "localDiesel": 199.9},
+    {"date": "2026-10-07", "petrol": 175.1, "diesel": 200.2, "brent": 101.3, "localPetrol": 176.9, "localDiesel": 199.9},
+    {"date": "2026-10-08", "petrol": 174.9, "diesel": 200.1, "brent": 102.8, "localPetrol": 176.9, "localDiesel": 199.9},
+    {"date": "2026-10-09", "petrol": 174.8, "diesel": 200.0, "brent": 102.86, "localPetrol": 176.9, "localDiesel": 199.9},
+    {"date": "2026-10-10", "petrol": 174.8, "diesel": 199.8, "brent": 103.24, "localPetrol": 176.9, "localDiesel": 199.9},
+    {"date": "2026-10-11", "petrol": 174.6, "diesel": 199.7, "brent": 104.5, "localPetrol": 176.9, "localDiesel": 198.9},
+    {"date": "2026-10-12", "petrol": 174.6, "diesel": 199.7, "brent": 103.9, "localPetrol": 176.9, "localDiesel": 198.9},
+    {"date": "2026-10-13", "petrol": 174.9, "diesel": 199.9, "brent": 105.3, "localPetrol": 175.9, "localDiesel": 198.9},
+    {"date": "2026-10-14", "petrol": 174.4, "diesel": 199.4, "brent": 106.16, "localPetrol": 175.9, "localDiesel": 198.9},
+    {"date": "2026-10-15", "petrol": 174.3, "diesel": 199.3, "brent": 104.68, "localPetrol": 175.9, "localDiesel": 198.9},
+    {"date": "2026-10-16", "petrol": 174.0, "diesel": 199.0, "brent": 105.01, "localPetrol": 175.9, "localDiesel": 198.9},
+    {"date": "2026-10-17", "petrol": 173.9, "diesel": 198.9, "brent": 109.86, "localPetrol": 175.9, "localDiesel": 198.9},
+    {"date": "2026-10-18", "petrol": 174.1, "diesel": 199.3, "brent": 109.86, "localPetrol": 175.9, "localDiesel": 198.9},
+    {"date": "2026-10-19", "petrol": 173.8, "diesel": 198.8, "brent": 107.66, "localPetrol": 175.9, "localDiesel": 198.9},
+    {"date": "2026-10-20", "petrol": 173.8, "diesel": 198.8, "brent": 110.41, "localPetrol": 174.9, "localDiesel": 199.9},
+    {"date": "2026-10-21", "petrol": 173.6, "diesel": 198.8, "brent": 110.22, "localPetrol": 174.9, "localDiesel": 199.9}
+  ],
+  "sources": [
+    { "name": "Macclesfield forecourts + Sainsbury's Cheadle", "detail": "FuelCosts.co.uk and fuel-finder.uk station pages, checked 21 Oct ~07:10 BST. Stale reads flagged per station." },
+    { "name": "Anglesey forecourts (LL65)", "detail": "fuel-finder.uk and FuelCosts.co.uk station pages; Essar and Jet not reconfirmed since 12 Oct." },
+    { "name": "UK national averages", "detail": "fuel-finder.uk live index, latest stamp 20 Oct 11:24." },
+    { "name": "Brent crude and GBP/USD", "detail": "Trading Economics (~$110.22) and poundsterlinglive, 21 Oct." },
+    { "name": "Conflict and market news", "detail": "Checked 21 Oct: WSJ, FT, UK maritime monitors, Iran International and others." },
+    { "name": "Scheduled task", "detail": "Daily Macclesfield fuel price check, ~07:10 BST." }
+  ]
+}
