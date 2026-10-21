@@ -50,7 +50,7 @@ h1{margin:0; font-size:38px; font-weight:800; letter-spacing:-.01em;}
 .gauge-panel{width:470px; -webkit-flex-shrink:0; flex-shrink:0; background:#1a2431; border-right:2px solid #283142;
   display:-webkit-flex;
   display:flex; -webkit-flex-direction:column; flex-direction:column; -webkit-align-items:center; align-items:center; -webkit-justify-content:center; justify-content:center; padding:30px;}
-.gauge{width:380px; height:226px;}
+.gauge{width:380px; height:226px; overflow:visible;}
 .gauge-verdict{font-size:56px; font-weight:800; letter-spacing:-.01em; margin-top:4px;}
 .gauge-verdict.up{color:#ff8478;} .gauge-verdict.mid{color:#f0bd52;} .gauge-verdict.down{color:#3ddb98;}
 .gauge-sub{font-size:20px; color:#95a1b0; margin-top:4px; text-align:center;}
@@ -133,7 +133,8 @@ h1{margin:0; font-size:38px; font-weight:800; letter-spacing:-.01em;}
 .legend .key{margin-right:22px; display:-webkit-flex; display:flex; -webkit-align-items:center; align-items:center;}
 .legend .line{display:inline-block; width:26px; border-top:4px solid; margin-right:8px;}
 .legend .line.dashed{border-top-style:dashed;}
-.chart{width:100%; display:block;}
+.chart{width:100%; height:auto; display:block; overflow:hidden;}
+.chart svg{max-width:100%;}
 .chart-label{font-size:15px; color:#95a1b0; text-transform:uppercase; letter-spacing:.05em; font-weight:700; margin:4px 0 0;}
 .chart-label:first-of-type{margin-top:0;}
 .stats{margin-top:18px; padding:8px 28px;}

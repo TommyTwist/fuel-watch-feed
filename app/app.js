@@ -11,6 +11,7 @@
   var loading = false;
 
   var CHANGELOG = [
+    { v: "2.1.1", d: "21 Oct 2026", t: "Fix: trend charts and gauge now draw on the 2016 TV browser (SVG built inside a container instead of injected into an empty SVG)." },
     { v: "2.1.0", d: "21 Oct 2026", t: "Burn-in: the header mirrors on every other page, swapping the title and the clock/pills from side to side." },
     { v: "2.0.0", d: "21 Oct 2026", t: "Remote-managed: the app now loads from GitHub, so updates need no reinstall. Burn-in protection: dimmer static header and footer, pixel drift every minute, near-black ambient view overnight." },
     { v: "1.2.0", d: "21 Oct 2026", t: "Pages auto-cycle every 30 seconds; any remote press pauses cycling until 5 minutes without input." },
@@ -122,6 +123,10 @@
     return "down";
   }
 
+  function svgWrap(vw, vh, w, h, inner) {
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + vw + " " + vh + '" width="' + w + '" height="' + h + '" style="display:block;overflow:visible">' + inner + "</svg>";
+  }
+
   function drawGauge(conf) {
     var cx = 160, cy = 170, r = 130;
     function pt(deg, rad) {
@@ -138,7 +143,7 @@
     svg += '<g transform="rotate(' + angle.toFixed(1) + " " + cx + " " + cy + ')">' +
       '<line x1="' + cx + '" y1="' + cy + '" x2="' + cx + '" y2="' + (cy - r + 18) + '" stroke="#eef2f8" stroke-width="6" stroke-linecap="round"/></g>';
     svg += '<circle cx="' + cx + '" cy="' + cy + '" r="12" fill="#eef2f8"/>';
-    $("gauge").innerHTML = svg;
+    $("gauge").innerHTML = svgWrap(320, 190, 380, 226, svg);
   }
 
   function tile(label, f, nat) {
@@ -253,9 +258,9 @@
       '<span class="key"><span class="line" style="border-top-color:' + P + '"></span>Petrol</span>' +
       '<span class="key"><span class="line" style="border-top-color:' + D + '"></span>Diesel</span>' +
       '<span class="key"><span class="line" style="border-top-color:' + G + '"></span>Brent</span>';
-    $("trendPetrol").innerHTML = panel(t, [{ k: "petrol", c: P }, { k: "localPetrol", c: P, dash: true }], 640, 118, "p", false);
-    $("trendDiesel").innerHTML = panel(t, [{ k: "diesel", c: D }, { k: "localDiesel", c: D, dash: true }], 640, 118, "p", false);
-    $("trendBrent").innerHTML = panel(t, [{ k: "brent", c: G }], 640, 132, "$", true);
+    $("trendPetrol").innerHTML = svgWrap(640, 118, 660, 122, panel(t, [{ k: "petrol", c: P }, { k: "localPetrol", c: P, dash: true }], 640, 118, "p", false));
+    $("trendDiesel").innerHTML = svgWrap(640, 118, 660, 122, panel(t, [{ k: "diesel", c: D }, { k: "localDiesel", c: D, dash: true }], 640, 118, "p", false));
+    $("trendBrent").innerHTML = svgWrap(640, 132, 660, 136, panel(t, [{ k: "brent", c: G }], 640, 132, "$", true));
   }
 
   function panel(t, series, W, H, unit, dates) {
