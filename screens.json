@@ -1,20 +1,27 @@
 {
   "_about": "Fuel Watch screen list. Written by the hourly console sync; edit in the Fuel Watch Screens console rather than by hand.",
-  "updatedAt": "2026-10-21T19:55:00+01:00",
+  "updatedAt": "2026-10-21T20:59:00+01:00",
   "policy": "open",
-  "defaults": {},
+  "defaults": {"ROTATE_SECONDS": 30, "NIGHT_START": 23, "NIGHT_END": 6},
   "screens": {
     "MTCISIBYIIMXE": {
       "name": "Office TV",
       "enabled": true,
-      "pages": [
-        "today",
-        "stations",
-        "market",
-        "about"
-      ],
+      "pages": ["today", "stations", "market", "about"],
       "config": {},
       "note": "UE43KU6670, 2016, Tizen 2.4"
     }
-  }
+  },
+  "media": [
+    {
+      "type": "image",
+      "id": "77280d10e0b35b246db04be8fa3bc02c",
+      "name": "Test image",
+      "src": "https://raw.githubusercontent.com/TommyTwist/fuel-watch-feed/main/media/77280d10e0b35b246db04be8fa3bc02c.jpg",
+      "seconds": 20,
+      "from": "2026-10-21T19:11:00.000Z",
+      "until": "2026-10-22T19:11:00.000Z",
+      "screens": "all"
+    }
+  ]
 }
