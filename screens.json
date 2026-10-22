@@ -1,6 +1,6 @@
 {
   "_about": "Fuel Watch screen list. Written by the hourly console sync; edit in the Fuel Watch Screens console rather than by hand.",
-  "updatedAt": "2026-10-21T21:15:00+01:00",
+  "updatedAt": "2026-10-22T20:58:00+01:00",
   "policy": "open",
   "defaults": {
     "ROTATE_SECONDS": 30,
@@ -33,16 +33,6 @@
       "muted": false,
       "from": null,
       "until": null,
-      "screens": "all"
-    },
-    {
-      "type": "image",
-      "id": "77280d10e0b35b246db04be8fa3bc02c",
-      "name": "Test image",
-      "src": "https://raw.githubusercontent.com/TommyTwist/fuel-watch-feed/main/media/77280d10e0b35b246db04be8fa3bc02c.jpg",
-      "seconds": 20,
-      "from": "2026-10-21T19:11:00.000Z",
-      "until": "2026-10-22T19:11:00.000Z",
       "screens": "all"
     }
   ]
